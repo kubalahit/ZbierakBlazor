@@ -1,0 +1,69 @@
+﻿@inject ISnackbar Snackbar
+
+<MudCard Class="col-md-6 col-sm-12">
+    <MudCardHeader Class="d-flex align-content-center justify-content-center">
+        <MudText Typo="Typo.h5" Align="Align.Center">
+            Kalkulator rozdziału wojsk na zbierak
+        </MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudText>Liczba odblokowanych poziomów zbieractwa:</MudText>
+        <MudRadioGroup T="int" @bind-SelectedOption="CollectingLevel">
+            <MudRadio Option="1" Color="Color.Primary">1</MudRadio>
+            <MudRadio Option="2" Color="Color.Primary">2</MudRadio>
+            <MudRadio Option="3" Color="Color.Primary">3</MudRadio>
+            <MudRadio Option="4" Color="Color.Primary">4</MudRadio>
+        </MudRadioGroup>
+        <MudText>Wprowadź pojemność wojsk na zbierak:</MudText>
+        <MudNumericField HideSpinButtons="true" @bind-Value="ArmyCapacity" Label="Pojemność wojsk" Variant="Variant.Text" Min="0" />
+        @if(Engine is not null && StagesValues is not null)
+        {
+            <div class="d-flex justify-content-between mt-4">
+                <div class="col-md-2">
+                    <div class="text-center">Stage 1</div>
+                    <div class="text-center">@StagesValues[1].ToString("0")</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-center">Stage 2</div>
+                    <div class="text-center">@StagesValues[2].ToString("0")</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-center">Stage 3</div>
+                    <div class="text-center">@StagesValues[3].ToString("0")</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-center">Stage 4</div>
+                    <div class="text-center">@StagesValues[4].ToString("0")</div>
+                </div>
+            </div>
+        }
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Calculate" OnClick="HandleOnClick">Oblicz</MudButton>
+        <MudSpacer />
+        <MudText Typo="Typo.caption">Zbierak v0.1 powered by Kubalahit</MudText>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    public int CollectingLevel { get; set; }
+    public int ArmyCapacity{ get; set; }
+    public Dictionary<int,double>? StagesValues { get; set; } //The key is number of stage ex. 1, 2, 3, 4. Value is the stage calculated capacity
+    public CollectingCalculationsEngine? Engine { get; set; }
+
+    public void HandleOnClick()
+    {
+        if (CollectingLevel == 0)
+        {
+            Snackbar.Add("Aby dokonać obliczeń wybierz poziom zbieractwa", Severity.Warning);
+            return;
+        }
+        if (ArmyCapacity < 10)
+        {
+            Snackbar.Add("Minimalna liczebność armii musi wynosić conajmniej 10 jednostek (minimum 100 ładowności)", Severity.Warning);
+            return;
+        }
+        Engine = new CollectingCalculationsEngine(CollectingLevel, ArmyCapacity);
+        StagesValues = Engine.CalculateOptimalArmyDistributionWithEqualTime();
+    }
+}
