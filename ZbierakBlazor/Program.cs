@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using ZbierakWeb;
+using ZbierakBlazor;
 using MudBlazor.Services;
 using MudBlazor;
 using ZbierakBlazor;

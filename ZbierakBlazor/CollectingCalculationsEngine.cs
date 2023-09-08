@@ -1,4 +1,4 @@
-﻿namespace ZbierakWeb
+﻿namespace ZbierakBlazor
 {
     public class CollectingCalculationsEngine
     {
