@@ -15,6 +15,7 @@
         const double s4Factor = 0.75;
 
         private Dictionary<int, double> StagesValues;
+        private double SummaryLootPerHour;
 
         public CollectingCalculationsEngine(int CollectingLevel, int ArmyCapacity)
         {
@@ -133,6 +134,14 @@
             return StagesValues;
         }
 
+        public double CalculateLootPerHour()
+        {
+            if (StagesValues[1] != 0) SummaryLootPerHour += (StagesValues[1] * s1Factor) / CalculateExpeditionTime(StagesValues[1], s1Factor) * 3600 / 3;
+            if (StagesValues[2] != 0) SummaryLootPerHour += (StagesValues[2] * s2Factor) / CalculateExpeditionTime(StagesValues[2], s2Factor) * 3600 / 3;
+            if (StagesValues[3] != 0) SummaryLootPerHour += (StagesValues[3] * s3Factor) / CalculateExpeditionTime(StagesValues[3], s3Factor) * 3600 / 3;
+            if (StagesValues[4] != 0) SummaryLootPerHour += (StagesValues[4] * s4Factor) / CalculateExpeditionTime(StagesValues[4], s4Factor) * 3600 / 3;
+            return SummaryLootPerHour;
+        }
         private double CalculateExpeditionTime(double capacity, double capacityFactor)
         {
             return (Math.Pow(Math.Pow(capacity, 2) * 100 * Math.Pow(capacityFactor, 2), durationExponent) + durationInitialSeconds) * durationFactor;

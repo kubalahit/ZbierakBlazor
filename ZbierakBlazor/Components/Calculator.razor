@@ -36,6 +36,8 @@
                     <div class="text-center">@StagesValues[4].ToString("0")</div>
                 </div>
             </div>
+            <br />
+            <MudText>Pojedynczy surowiec na godzinę (np. drewno): @SummaryLootPerHour.ToString("0")</MudText>
         }
     </MudCardContent>
     <MudCardActions>
@@ -49,6 +51,7 @@
     public int CollectingLevel { get; set; }
     public int ArmyCapacity{ get; set; }
     public Dictionary<int,double>? StagesValues { get; set; } //The key is number of stage ex. 1, 2, 3, 4. Value is the stage calculated capacity
+    public double SummaryLootPerHour { get; set; }
     public CollectingCalculationsEngine? Engine { get; set; }
 
     public void HandleOnClick()
@@ -65,5 +68,6 @@
         }
         Engine = new CollectingCalculationsEngine(CollectingLevel, ArmyCapacity);
         StagesValues = Engine.CalculateOptimalArmyDistributionWithEqualTime();
+        SummaryLootPerHour = Engine.CalculateLootPerHour();
     }
 }
